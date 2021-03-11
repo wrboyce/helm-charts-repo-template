@@ -1,0 +1,42 @@
+{
+  "extends": [
+    "config:base",
+    ":disableRateLimiting",
+    ":enableVulnerabilityAlertsWithLabel(security)",
+    ":semanticCommits",
+    ":separateMultipleMajorReleases",
+    ":separateMajorReleases",
+    ":separatePatchReleases",
+    ":dependencyDashboard",
+    ":rebaseStalePrs"
+  ],
+  "helmv3": {
+    "fileMatch": ["charts/.+/Chart[.]yaml$"]
+  },
+  "packageRules": [
+    {
+      "matchUpdateTypes": ["major"],
+      "bumpVersion": "major",
+      "addLabels": ["dependency/major"]
+    },
+    {
+      "matchUpdateTypes": ["minor"],
+      "bumpVersion": "minor",
+      "addLabels": ["dependency/minor"]
+    },
+    {
+      "matchUpdateTypes": ["patch"],
+      "bumpVersion": "patch",
+      "addLabels": ["dependency/patch"]
+    },
+
+    {
+      "matchDatasources": ["docker"],
+      "addLabels": ["renovate/docker"]
+    },
+    {
+      "matchDatasources": ["helmv3"],
+      "addLabels": ["renovate/helmv3"]
+    }
+  ]
+}
